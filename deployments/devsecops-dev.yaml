@@ -1,0 +1,93 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: "2021-03-04T02:23:29Z"
+    generation: 3
+    labels:
+      app: test-apps-vuln
+    name: test-apps-vuln
+    namespace: devsecops-dev
+  spec:
+    replicas: 1
+    selector:
+      app: test-apps-vuln
+      deploymentconfig: test-apps-vuln
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftWebConsole
+        creationTimestamp: null
+        labels:
+          app: test-apps-vuln
+          deploymentconfig: test-apps-vuln
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ENDPOINT
+            value: 10.217.4.247
+          - name: MYSQL_DB
+            value: demo
+          - name: MYSQL_PASSWORD
+            value: redhat123
+          - name: MYSQL_USER
+            value: demo
+          - name: SECRET_KEY
+            value: secretkey
+          image: quay.io/alanadiprastyo/test-apps-vuln@sha256:8c5a0968c0c38b91eee9def5f906e9f5a2a54bc105dfdd66a7669eb1031dd5b6
+          imagePullPolicy: IfNotPresent
+          name: test-apps-vuln
+          ports:
+          - containerPort: 10007
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: "2021-03-04T02:23:29Z"
+    labels:
+      app: test-apps-vuln
+    name: test-apps-vuln
+    namespace: devsecops-dev
+  spec:
+    ports:
+    - name: 10007-tcp
+      port: 10007
+      protocol: TCP
+      targetPort: 10007
+    selector:
+      app: test-apps-vuln
+      deploymentconfig: test-apps-vuln
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
