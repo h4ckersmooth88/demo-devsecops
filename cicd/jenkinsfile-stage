@@ -36,7 +36,7 @@ pipeline {
 			echo "Scan use NMAP"
 			//sh "docker run --rm -v \$(pwd):/tmp uzyexe/nmap devsecops-stage-devsecops-stage.apps-crc.testing > nmap_out.txt  || true"
 			sh "/usr/bin/nmap -v --script vuln devsecops-stage-devsecops-stage.apps-crc.testing -oX nmap_out.xml || true"
-		    	archiveArtifacts artifacts: 'nmap_out.txt', onlyIfSuccessful: true //fingerprint: true
+		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
 	stage('DAST Nikto'){
