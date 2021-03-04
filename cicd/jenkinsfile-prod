@@ -31,6 +31,7 @@ pipeline {
 	}
 	stage('Deploy WAF to Production'){
 		echo "Deploy WAF to production"
+		echo "access to http://192.168.1.31:8090/"
 	}    
     }
 }
