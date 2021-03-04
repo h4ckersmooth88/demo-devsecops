@@ -1,5 +1,5 @@
 #FROM python:3.6
-FROM quay.io/bitnami/python:3.8-prod
+FROM  python:3.6.13-buster
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
