@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+   
+    stages{
+        stage('Tag Docker Image to Prod'){
+            steps{
+                sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
+		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
+            }
+        }
+	stage('Deploy to Prod'){
+                input {
+                	message "Deploy to Production?"
+                	ok "Yes, Deploy to Production"
+            	}
+		steps{
+			echo "Deploy to Prod"
+                        sh "sed -i s/UPDATE/v1-prod.${env.BUILD_ID}/g deployments/devsecops-prod.yaml"
+                        sh "oc apply -f deployments/devsecops-prod.yaml"
+	
+		}
+	  	post{
+                	success {
+                    		echo 'Success deploy to prod'
+                	}
+               		failure {
+                    		echo 'Failed deploy to prod'
+                	}
+	  }
+
+	}
+	stage('Deploy WAF to Production'){
+		echo "Deploy WAF to production"
+	}    
+    }
+}
+
