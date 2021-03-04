@@ -57,16 +57,18 @@ pipeline {
 		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:latest"
             }
         }
-        stage('Scan Image with anchore'){
-		steps{	
-			sh "echo 'scan image docker use ancore'"
-			script {
-			imageLineDev = 'quay.io/alanadiprastyo/test-apps-vuln:latest'
-			writeFile file: 'anchore_images', text: imageLineDev
-			anchore name: 'anchore_images'
-			}
-		}
-        }
+
+//        stage('Scan Image with anchore'){
+//		steps{	
+//			sh "echo 'scan image docker use ancore'"
+//			script {
+//			imageLineDev = 'quay.io/alanadiprastyo/test-apps-vuln:latest'
+//			writeFile file: 'anchore_images', text: imageLineDev
+//			anchore name: 'anchore_images'
+//			}
+//		}
+//       }
+
 	stage('Deploy to Dev'){
 		steps{
 			echo "Deploy to Dev"
