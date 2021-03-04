@@ -5,8 +5,6 @@ items:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: "2021-03-04T02:23:29Z"
-    generation: 3
     labels:
       app: test-apps-vuln
     name: test-apps-vuln
@@ -47,8 +45,8 @@ items:
             value: demo
           - name: SECRET_KEY
             value: secretkey
-          image: quay.io/alanadiprastyo/test-apps-vuln@sha256:8c5a0968c0c38b91eee9def5f906e9f5a2a54bc105dfdd66a7669eb1031dd5b6
-          imagePullPolicy: IfNotPresent
+          image: quay.io/alanadiprastyo/test-apps-vuln:UPDATE
+          imagePullPolicy: Always
           name: test-apps-vuln
           ports:
           - containerPort: 10007
@@ -69,7 +67,6 @@ items:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: "2021-03-04T02:23:29Z"
     labels:
       app: test-apps-vuln
     name: test-apps-vuln
