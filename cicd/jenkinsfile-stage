@@ -17,6 +17,7 @@ pipeline {
             	}
 		steps{
 			echo "Deploy to Stage"
+			sh "oc login -u kubeadmin -p APBEh-jjrVy-hLQZX-VI9Kg https://api.crc.testing:6443"
                         sh "sed -i s/UPDATE/v1-testing.${env.BUILD_ID}/g deployments/devsecops-stage.yaml"
                         sh "oc apply -f deployments/devsecops-stage.yaml"
 	
