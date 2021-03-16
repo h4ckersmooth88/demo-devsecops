@@ -43,8 +43,9 @@ pipeline {
 	stage('DAST Nikto'){
 		steps{
 			echo "Scan use Nikto"
-			sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137 -v \$(pwd):/tmp alpine/nikto -h devsecops-stage-devsecops-stage.apps-crc.testing > nikto.txt  || true"
-		    	archiveArtifacts artifacts: 'nikto.txt', onlyIfSuccessful: true //fingerprint: true
+			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137 -v \$(pwd):/tmp alpine/nikto -h devsecops-stage-devsecops-stage.apps-crc.testing > nikto.txt  || true"
+			sh "/usr/local/bin/nikto.pl --o nikto_scan_result.html -Format html -h http://devsecops-stage-devsecops-stage.apps-crc.testing"
+		    	archiveArtifacts artifacts: 'nikto_scan_result.html', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
 	stage('DAST Owasp Zap'){
@@ -52,7 +53,10 @@ pipeline {
 			echo "Scan use Owasp ZAP"
 			//sh "docker run --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137 --rm  -v \$(pwd):/tmp owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing"
 			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137 -v \$(pwd):/tmp owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing > zap.txt  || true"
-		    	//archiveArtifacts artifacts: 'zap-output.xml', onlyIfSuccessful: true //fingerprint: true
+               		 sh "echo \$(pwd)"
+                	 sh "chmod 777 \$(pwd)"
+                	 sh "docker run  --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -w /zap -v \$(pwd):/zap/wrk:rw --rm owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing -J zap-output.json"
+			archiveArtifacts artifacts: 'zap-output.json', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
     }
