@@ -12,14 +12,16 @@ pipeline {
         }
         stage('Dependency Check with Python Safety'){
             steps{
-               		sh "docker run -v \$(pwd):/src --rm hysnsec/safety check -r app/requirements.txt --json > sca-scaning-safety.json  || true"
+               		#sh "docker run -v \$(pwd):/src --rm hysnsec/safety check -r app/requirements.txt --json > sca-scaning-safety.json  || true"
+			sh "/usr/local/bin/safety check -r app/requirements.txt --json > sca-scaning-safety.json  || true"
 		    	archiveArtifacts artifacts: 'sca-scaning-safety.json', onlyIfSuccessful: true //fingerprint: true
 	}
         }
         stage('Static Analysis with python-taint'){
             steps{
 		    	echo "SCA test Python Taint"
-               		sh "docker run -v \$(pwd):/src --rm vickyrajagopal/python-taint-docker pyt . -j > sca-scaning-pyt.json  || true"
+               		#sh "docker run -v \$(pwd):/src --rm vickyrajagopal/python-taint-docker pyt . -j > sca-scaning-pyt.json  || true"
+			sh "/usr/local/bin/pyt app/ -j > sca-scaning-pyt.json  || true"
 		    	archiveArtifacts artifacts: 'sca-scaning-pyt.json', onlyIfSuccessful: true //fingerprint: true
 			
 	}
@@ -27,7 +29,8 @@ pipeline {
         stage('Python Bandit Security Scan'){
             steps{
 		    	echo "SAST test Python Bandit"
-               		sh "docker run -v \$(pwd):/src --rm secfigo/bandit:latest bandit . -f json > sca-scaning-bandit.json  || true"
+               		#sh "docker run -v \$(pwd):/src --rm secfigo/bandit:latest bandit . -f json > sca-scaning-bandit.json  || true"
+			sh "/usr/local/bin/bandit -r app/ -f json  > sca-scaning-bandit.json  || true"
 		    	archiveArtifacts artifacts: 'sca-scaning-bandit.json', onlyIfSuccessful: true //fingerprint: true
 			
 	}
