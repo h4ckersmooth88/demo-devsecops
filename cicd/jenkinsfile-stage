@@ -32,14 +32,6 @@ pipeline {
 	  }
 
 	}    
-	stage('DAST NMAP'){
-		steps{
-			echo "Scan use NMAP"
-			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -v \$(pwd):/tmp uzyexe/nmap devsecops-stage-devsecops-stage.apps-crc.testing > nmap_out.txt  || true"
-			sh "/usr/bin/nmap -v --script vuln devsecops-stage-devsecops-stage.apps-crc.testing -oX nmap_out.xml || true"
-		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
-		}
-	}
 	stage('DAST Nikto'){
 		steps{
 			echo "Scan use Nikto"
@@ -57,6 +49,15 @@ pipeline {
                 	 sh "chmod 777 \$(pwd)"
                 	 sh "docker run  --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -w /zap -v \$(pwd):/zap/wrk:rw --rm owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing -J zap-output.json || true"
 			archiveArtifacts artifacts: 'zap-output.json', onlyIfSuccessful: true //fingerprint: true
+		}
+	}
+
+	stage('DAST NMAP'){
+		steps{
+			echo "Scan use NMAP"
+			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -v \$(pwd):/tmp uzyexe/nmap devsecops-stage-devsecops-stage.apps-crc.testing > nmap_out.txt  || true"
+			sh "/usr/bin/nmap -v --script vuln devsecops-stage-devsecops-stage.apps-crc.testing -oX nmap_out.xml || true"
+		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
     }
