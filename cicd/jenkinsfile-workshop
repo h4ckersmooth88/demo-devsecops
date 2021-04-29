@@ -81,18 +81,18 @@ pipeline {
 		}
 	}
 
-        stage('Tag Docker Image'){
-            steps{
-                sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
-		sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:testing"
-		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
-		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:testing"
-            }
-        }
+
 	stage('Deploy to Stage'){
                 input {
                 	message "Deploy to Stage Area?"
                 	ok "Yes, Deploy to Staging"
+            	}
+            	steps{
+			echo "Tag image stage"
+                	sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
+			sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:testing"
+			sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
+			sh "docker push quay.io/alanadiprastyo/test-apps-vuln:testing"
             	}
 		steps{
 			echo "Deploy to Stage"
@@ -140,16 +140,15 @@ pipeline {
 		}
 	}
 
-        stage('Tag Docker Image to Prod'){
-            steps{
-                sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
-		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
-            }
-        }
 	stage('Deploy to Prod'){
                 input {
                 	message "Deploy to Production?"
                 	ok "Yes, Deploy to Production"
+            	}
+            	steps{
+			echo "Tag Docker Image to Prod"
+                	sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
+			sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
             	}
 		steps{
 			echo "Deploy to Prod"
