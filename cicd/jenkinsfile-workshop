@@ -139,24 +139,26 @@ pipeline {
 		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
-
+	stage(''){
+	         steps{
+			echo "Tag Docker Image to Prod"
+                	sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
+			sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
+            	}
+	}
 	stage('Deploy to Prod'){
                 input {
                 	message "Deploy to Production?"
                 	ok "Yes, Deploy to Production"
             	}
-            	steps{
-			echo "Tag Docker Image to Prod"
-                	sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
-			sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
-            	}
-		steps{
-			echo "Deploy to Prod"
-			sh "oc login -u kubeadmin -p APBEh-jjrVy-hLQZX-VI9Kg https://api.crc.testing:6443"
-                        sh "sed -i s/UPDATE/v1-prod.${env.BUILD_ID}/g deployments/devsecops-prod.yaml"
-                        sh "oc apply -f deployments/devsecops-prod.yaml"
-	
-		}
+
+		//steps{
+		//	echo "Deploy to Prod"
+		//	sh "oc login -u kubeadmin -p APBEh-jjrVy-hLQZX-VI9Kg https://api.crc.testing:6443"
+                //        sh "sed -i s/UPDATE/v1-prod.${env.BUILD_ID}/g deployments/devsecops-prod.yaml"
+                //        sh "oc apply -f deployments/devsecops-prod.yaml"
+		//}
+		
 	  	post{
                 	success {
                     		echo 'Success deploy to prod'
