@@ -81,11 +81,12 @@ pipeline {
 		}
 	}
 	stage('Push image stage'){
-		echo "Tag image stage"
+	steps{
                 sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
 		sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:testing"
 		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
 		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:testing"
+	}
 	}
 
 	stage('Deploy to Stage'){
@@ -139,7 +140,7 @@ pipeline {
 		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
-	stage(''){
+	stage('Push to Prod'){
 	         steps{
 			echo "Tag Docker Image to Prod"
                 	sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:testing quay.io/alanadiprastyo/test-apps-vuln:v1-prod.${env.BUILD_ID}"
