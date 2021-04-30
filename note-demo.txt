@@ -15,6 +15,7 @@
 12. tim developer melalukan refactor code terhadap issue xss dengan hapus filter safe pada code
 - app/templates/gossip.html (pada line 78, 116)
 - app/templates/gossip.html (pada line 58)
+- app/templates/gossip.html (pada line 80)
 13. push ke github
 14. jalankan pipeline dev -> kemudian testing qa sederhana 
 <script>alert("inject xss");</script>
