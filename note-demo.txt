@@ -1,0 +1,24 @@
+# step by step demo devsecops i3
+1. jelaskan flow pipeline dan use case nya
+2. jelaskan masing2 tools sebelum menjalankan pipeline (ex: anhcore, snyk, sonarqube, dll)
+3. jalankan pipeline untuk development
+4. analisa masing-masing bagian pada pipeline development
+5. perbaiki satu case pada dependency python dengan snyk atay Safety
+6. jalankan pipeline lagi untuk development
+7. testing kembali, makesure vuln pada dependency python sudah berkurang
+8. jalankan pipeline pada staging oleh tim security dengan melihat pada defect dojo
+9. sudah ditemukan issue pada defect dojo yaitu issue xss, kemudian tim security melakukan pentest terpisah dengan fokus ke xss 
+10. menjalankan xss seperti ini di kolom komentar, search
+<script>alert("inject xss");</script>
+
+11. setelah ditemukan tim security melaporkan temuan tsb ke tim developer untuk dicari solusinyan
+12. tim developer melalukan refactor code terhadap issue xss dengan hapus filter safe pada code
+- app/templates/gossip.html (pada line 78, 116)
+- app/templates/gossip.html (pada line 58)
+13. push ke github
+14. jalankan pipeline dev -> kemudian testing qa sederhana 
+<script>alert("inject xss");</script>
+15. setelah berhasil, jalankan pipeline di staging kemudian test xss
+16. kemudian jalankan pipeline ke production
+17. testing xss pada production pastikan sudah di filter mengunakan waf
+18. kemudian monitoring apps melalui wazuh
