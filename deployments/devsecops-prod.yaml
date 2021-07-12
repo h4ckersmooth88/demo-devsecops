@@ -37,13 +37,13 @@ items:
         containers:
         - env:
           - name: MYSQL_ENDPOINT
-            value: 10.217.4.123
+            value: mariadb
           - name: MYSQL_DB
-            value: prod
+            value: demo
           - name: MYSQL_PASSWORD
             value: redhat123
           - name: MYSQL_USER
-            value: prod
+            value: demo
           - name: SECRET_KEY
             value: secretkey
           image: quay.io/alanadiprastyo/test-apps-vuln:UPDATE
