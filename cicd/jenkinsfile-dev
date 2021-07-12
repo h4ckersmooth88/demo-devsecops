@@ -65,7 +65,7 @@ pipeline {
 		steps{	
 			sh "echo 'scan image docker use ancore'"
 			script {
-			imageLineDev = 'quay.io/alanadiprastyo/versioned-hello:latest'
+			imageLineDev = 'registry.access.redhat.com/ubi8/ubi-minimal:latest'
 			writeFile file: 'anchore_images', text: imageLineDev
 			anchore name: 'anchore_images'
 			}
