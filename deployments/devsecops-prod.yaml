@@ -6,7 +6,6 @@ items:
     annotations:
       openshift.io/generated-by: OpenShiftWebConsole
     creationTimestamp: "2021-03-04T02:23:29Z"
-    generation: 3
     labels:
       app: test-apps-vuln
     name: test-apps-vuln

@@ -36,7 +36,7 @@ items:
         containers:
         - env:
           - name: MYSQL_ENDPOINT
-            value: 10.217.4.247
+            value: mariadb
           - name: MYSQL_DB
             value: demo
           - name: MYSQL_PASSWORD
