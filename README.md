@@ -8,12 +8,31 @@ Gossip World is a simple Flask app that contains an example of multiple Cross-Si
 
 ## Index
 
+- [Deploy Apps to Codeready/k8s](#deploy-apps-to-codeready)
 - [Definition](#what-is-cross-site-scripting)
 - [Setup](#setup)
 - [Attack narrative](#attack-narrative)
 - [Objectives](#secure-this-app)
 - [Solutions](#pr-solutions)
 - [Contributing](#contributing)
+
+
+## Deploy Apps to Codeready/k8s
+
+Deploy Apps on Openshift/Codeready with 3 project
+- devsecops-dev
+- devsecops-stage
+- devsecops-prod
+
+Before deploy apps, you must deploy mariadb persistant storage in every project.
+```sh
+cd deployments
+oc apply devsecops-dev.yaml
+oc apply devsecops-stage.yaml
+oc apply devsecops-prod.yaml
+```
+
+Access Apps using route [http://flask-devsecops-dev.apps.example.com][App] ! 😆
 
 ## What is Cross-Site Scripting?
 
