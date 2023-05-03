@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gosip-app-dev
+  namespace: devsecops-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gosip-app-dev
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gosip-app-dev
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: mariadb-dev
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: mariadb-dev
+        - name: MYSQL_DB
+          valueFrom:
+            secretKeyRef:
+              key: database-name
+              name: mariadb-dev
+        - name: MYSQL_ENDPOINT
+          value: mariadb-dev
+        - name: SECRET_KEY
+          value: secretkey
+        image: registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:UPDATE
+        imagePullPolicy: IfNotPresent
+        name: gosip-app-dev
+        ports:
+        - containerPort: 10007
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 128m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: i3-registry
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

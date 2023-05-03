@@ -54,10 +54,18 @@ pipeline {
 		    archiveArtifacts artifacts: 'image-scan.json', onlyIfSuccessful: true //fingerprint: true
 		}
        }
-        stage('Push Docker Image to Internal Registry'){
+        stage('Push to Nexus'){
             steps{
                 sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
 		        sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
+            }
+        }
+        stage('Deploy to Openshift'){
+            steps{
+                echo 'Login to OCP'
+		        sh "oc login --insecure-skip-tls-verify=true --token=sha256~DauKQCyGoB0iEGHh-ZmqdRapNAvEH4V4csD7vv341Jc --server=https://api.lab.i3datacenter.my.id:6443"
+                sh "sed -i s/UPDATE/v1.${env.BUILD_ID}/g deployments/devsecops-demo.yaml"
+			    sh "oc apply -f deployments/devsecops-demo.yaml"
             }
         }
     }
