@@ -39,5 +39,26 @@ pipeline {
 		    	archiveArtifacts artifacts: 'misconf-check.json', onlyIfSuccessful: true //fingerprint: true
             }
         }
+        stage('Build Docker Image'){
+            steps{
+                sh "docker build -t demo-devsecops-flask ."
+                sh "docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
+		        sh "docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
+            }
+        }
+        stage('Image Scanning'){
+		steps{	
+			echo 'Image Scanning'
+			sh "trivy image  registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID} || true"
+            sh "trivy image  registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID} -f json -o image-scan.json  || true"
+		    archiveArtifacts artifacts: 'image-scan.json', onlyIfSuccessful: true //fingerprint: true
+		}
+       }
+        stage('Push Docker Image to Internal Registry'){
+            steps{
+                sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
+		        sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
+            }
+        }
     }
 }
