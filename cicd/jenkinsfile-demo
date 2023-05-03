@@ -26,13 +26,15 @@ pipeline {
         stage('Quality Code Check') {
             steps {
                 echo 'Static Analysis Security Testing'
-                sh '''
-                /var/lib/jenkins/sonar-scanner/bin/sonar-scanner \
-                -Dsonar.projectKey=demo-devsecops  \
-                -Dsonar.sources=.   \
-                -Dsonar.host.url=http://10.8.60.21:9000 \   
-                -Dsonar.token=sqp_42de4acef23aa8c795453c329e2225428d800455
-                '''
+                script {
+                    sh '''
+                    /var/lib/jenkins/sonar-scanner/bin/sonar-scanner \
+                    -Dsonar.projectKey=demo-devsecops  \
+                    -Dsonar.sources=.   \
+                    -Dsonar.host.url=http://10.8.60.21:9000 \   
+                    -Dsonar.token=sqp_42de4acef23aa8c795453c329e2225428d800455
+                    '''
+                }
             }
         }
         stage('Miscofiguration Check') {
