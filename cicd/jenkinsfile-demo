@@ -61,6 +61,10 @@ pipeline {
             }
         }
         stage('Deploy to Openshift'){
+                input {
+                	message "Deploy to Development?"
+                	ok "Yes, Deploy to Development"
+            	}
             steps{
                 echo 'Login to OCP'
 		        sh "oc login --insecure-skip-tls-verify=true --token=sha256~DauKQCyGoB0iEGHh-ZmqdRapNAvEH4V4csD7vv341Jc --server=https://api.lab.i3datacenter.my.id:6443"
