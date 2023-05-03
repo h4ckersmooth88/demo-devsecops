@@ -41,9 +41,9 @@ pipeline {
         }
         stage('Build Docker Image'){
             steps{
-                sh "docker build -t demo-devsecops-flask ."
-                sh "docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
-		        sh "docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
+                sh "sudo docker build -t demo-devsecops-flask ."
+                sh "sudo docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
+		        sh "sudo docker tag demo-devsecops-flask registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
             }
         }
         stage('Image Scanning'){
@@ -56,8 +56,8 @@ pipeline {
        }
         stage('Push Docker Image to Internal Registry'){
             steps{
-                sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
-		        sh "docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
+                sh "sudo docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:v1.${env.BUILD_ID}"
+		        sh "sudo docker push registry.i-3.my.id:5000/jaguar/demo-devsecops-flask:latest"
             }
         }
     }
