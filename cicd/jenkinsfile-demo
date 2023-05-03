@@ -67,7 +67,7 @@ pipeline {
             	}
             steps{
                 echo 'Login to OCP'
-		        sh "oc login --insecure-skip-tls-verify=true --token=sha256~DauKQCyGoB0iEGHh-ZmqdRapNAvEH4V4csD7vv341Jc --server=https://api.lab.i3datacenter.my.id:6443"
+		        sh "oc login --insecure-skip-tls-verify=true --token=uKQCyGoB0iEGHh-ZmqdRac --server=https://aapi.lab.i3datacenter.my.id:6443"
                 sh "sed -i s/UPDATE/v1.${env.BUILD_ID}/g deployments/devsecops-demo.yaml"
 			    sh "oc apply -f deployments/devsecops-demo.yaml"
             }
