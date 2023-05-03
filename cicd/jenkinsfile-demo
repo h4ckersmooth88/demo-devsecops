@@ -7,7 +7,27 @@ pipeline {
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alanadiprastyo/demo-devsecops.git']]])
             }
         }
-        stage('Trivy Version') {
+        stage('Secret Detection') {
+            steps {
+                echo 'Secret Detection'
+                sh "trivy fs --scanners secret .  || true"
+                sh "trivy fs --scanners secret . -f json -o secret-detection.json  || true"
+		    	archiveArtifacts artifacts: 'secret-detection.json', onlyIfSuccessful: true //fingerprint: true
+            }
+        }
+        stage('Dependency Check') {
+            steps {
+                echo 'Hello World'
+                sh 'trivy version'
+            }
+        }
+        stage('Static Analysis Security Testing') {
+            steps {
+                echo 'Hello World'
+                sh 'trivy version'
+            }
+        }
+        stage('Miscofiguration Check') {
             steps {
                 echo 'Hello World'
                 sh 'trivy version'
