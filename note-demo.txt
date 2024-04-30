@@ -23,3 +23,4 @@
 16. kemudian jalankan pipeline ke production
 17. testing xss pada production pastikan sudah di filter mengunakan waf
 18. kemudian monitoring apps melalui wazuh
+asdasdasd
