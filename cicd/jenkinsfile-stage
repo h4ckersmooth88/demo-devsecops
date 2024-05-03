@@ -2,36 +2,7 @@ pipeline {
     agent any
    
     stages{
-        stage('Tag Docker Image'){
-            steps{
-                sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
-		sh "docker tag quay.io/alanadiprastyo/test-apps-vuln:latest quay.io/alanadiprastyo/test-apps-vuln:testing"
-		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:v1-testing.${env.BUILD_ID}"
-		sh "docker push quay.io/alanadiprastyo/test-apps-vuln:testing"
-            }
-        }
-	stage('Deploy to Stage'){
-                input {
-                	message "Deploy to Stage Area?"
-                	ok "Yes, Deploy to Staging"
-            	}
-		steps{
-			echo "Deploy to Stage"
-			sh "oc login -u kubeadmin -p APBEh-jjrVy-hLQZX-VI9Kg https://api.crc.testing:6443"
-                        sh "sed -i s/UPDATE/v1-testing.${env.BUILD_ID}/g deployments/devsecops-stage.yaml"
-                        sh "oc apply -f deployments/devsecops-stage.yaml"
-	
-		}
-	  	post{
-                	success {
-                    		echo 'Success deploy to staging'
-                	}
-               		failure {
-                    		echo 'Failed deploy to staging'
-                	}
-	  }
-
-	}    
+         
 	stage('DAST Nikto'){
 		steps{
 			echo "Scan use Nikto"
@@ -47,8 +18,8 @@ pipeline {
 			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137 -v \$(pwd):/tmp owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing > zap.txt  || true"
                		 sh "echo \$(pwd)"
                 	 sh "chmod 777 \$(pwd)"
-                	 sh "docker run  --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -w /zap -v \$(pwd):/zap/wrk:rw --rm owasp/zap2docker-stable zap-baseline.py -t http://devsecops-stage-devsecops-stage.apps-crc.testing -J zap-output.json || true"
-			archiveArtifacts artifacts: 'zap-output.json', onlyIfSuccessful: true //fingerprint: true
+                	 sh "docker run --rm zaproxy/zap-stable zap-baseline.py -t http://192.168.1.13:10007 > zap-output.txt || true"
+			archiveArtifacts artifacts: 'zap-output.txt', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
 
