@@ -21,9 +21,8 @@ pipeline {
 	stage('DAST NMAP'){
 		steps{
 			echo "Scan use NMAP"
-			//sh "docker run --rm --add-host devsecops-stage-devsecops-stage.apps-crc.testing:192.168.1.137  -v \$(pwd):/tmp uzyexe/nmap devsecops-stage-devsecops-stage.apps-crc.testing > nmap_out.txt  || true"
-			sh "/usr/bin/nmap -v --script vuln devsecops-stage-devsecops-stage.apps-crc.testing -oX nmap_out.xml || true"
-		    	archiveArtifacts artifacts: 'nmap_out.xml', onlyIfSuccessful: true //fingerprint: true
+			sh "docker run --rm -it instrumentisto/nmap -A --script vulners -sV -Pn -p 10007 192.168.1.13 > nmap_out.txt || true"
+		    	archiveArtifacts artifacts: 'nmap_out.txt', onlyIfSuccessful: true //fingerprint: true
 		}
 	}
     }
